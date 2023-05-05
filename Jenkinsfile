@@ -1,11 +1,7 @@
 #!/usr/bin/groovy
 
 pipeline {
-    agent {
-        docker {
-            image 'azagramac/maven'
-            args '-v /root/.m2:/root/.m2'
-        }
+    agent any
     }
     
     environment {
