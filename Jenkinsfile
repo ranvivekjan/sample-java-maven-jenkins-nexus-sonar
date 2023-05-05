@@ -2,8 +2,6 @@
 
 pipeline {
     agent any
-    }
-    
     environment {
         // This can be nexus3 or nexus2 server
         NEXUS_VERSION = "nexus3"
