@@ -14,12 +14,11 @@ pipeline {
         // This can be http or https
         NEXUS_PROTOCOL = "http"
         // Where your Nexus is running
-        NEXUS_URL = "10.22.21.138:8081"
+        NEXUS_URL = "65.0.128,192:8081"
         // Repository where we will upload the artifact
-        NEXUS_REPOSITORY_RELEASES = "maven-releases"
-        NEXUS_REPOSITORY_SNAPSHOTS = "maven-snapshots"
+        NEXUS_REPOSITORY = "maven-central-repository"
         // Jenkins credential id to authenticate to Nexus OSS
-        NEXUS_CREDENTIAL_ID = "899bfb86-db46-3333-939e-464185476a57"
+        NEXUS_CREDENTIAL_ID = "NEXUS_CRED"
     }
     
     stages {
@@ -37,16 +36,7 @@ pipeline {
                     junit 'target/surefire-reports/*.xml'
                 }
             }
-        }
-        
-        stage('SonarQube Analytics') {
-            steps {
-                withSonarQubeEnv('sonar-server') {
-                    sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar'
-                }
-            }
-        }
-        
+        }        
         stage('Nexus Repository') {
             steps {
                 script {
@@ -63,7 +53,7 @@ pipeline {
                                 nexusUrl: NEXUS_URL,
                                 groupId: pom.groupId,
                                 version: pom.version,
-                                repository: NEXUS_REPOSITORY_SNAPSHOTS,
+                                repository: NEXUS_REPOSITORY,
                                 credentialsId: NEXUS_CREDENTIAL_ID, 
                                 artifacts: [
                                     [artifactId: pom.artifactId, 
